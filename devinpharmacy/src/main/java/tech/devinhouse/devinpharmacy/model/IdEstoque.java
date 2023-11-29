@@ -1,4 +1,4 @@
-package model;
+package tech.devinhouse.devinpharmacy.model;
 
 public class IdEstoque {
 

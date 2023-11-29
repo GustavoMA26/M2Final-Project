@@ -1,4 +1,4 @@
-package model;
+package tech.devinhouse.devinpharmacy.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,6 +30,4 @@ public class Medicamento {
     @Enumerated(EnumType.STRING)
     private TipoMedicamento tipo;
 
-    @ManyToMany(mappedBy = "medicamentos" )
-    private List<Farmacia> farmacias;
 }

@@ -1,4 +1,4 @@
-package model;
+package tech.devinhouse.devinpharmacy.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
