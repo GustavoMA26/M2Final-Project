@@ -1,7 +1,13 @@
 package tech.devinhouse.devinpharmacy.model;
 
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Embeddable
 public class Endereco {
     private Long cep;
