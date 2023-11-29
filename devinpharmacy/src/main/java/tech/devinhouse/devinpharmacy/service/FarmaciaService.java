@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.devinhouse.devinpharmacy.model.Farmacia;
 import tech.devinhouse.devinpharmacy.repositories.FarmaciaRepo;
+import tech.devinhouse.devinpharmacy.exceptions.CnpjNaoEncontradoException;
 
 import java.util.List;
 
@@ -15,6 +16,10 @@ public class FarmaciaService {
 
     public List<Farmacia> consultar() {
         return farmaciaRepo.findAll();
+    }
+
+    public Farmacia consultar(Long cnpj) {
+        return farmaciaRepo.findById(cnpj).orElseThrow(new CnpjNaoEncontradoException());
     }
 
     public Farmacia salvar(Farmacia farmacia) {

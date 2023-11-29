@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tech.devinhouse.devinpharmacy.dto.FarmaciaResponse;
 import tech.devinhouse.devinpharmacy.model.Farmacia;
@@ -31,6 +32,13 @@ public class FarmaciasController {
             FarmaciaResponse f = mapper.map(farmacia, FarmaciaResponse.class);
             response.add(f);
         }
+        return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/{cnpj}")
+    public ResponseEntity<FarmaciaResponse> consultarFarmacia(@PathVariable("cnpj") Long cnpj) {
+        Farmacia farmacia = farmaciaService.consultar(cnpj);
+        FarmaciaResponse response = mapper.map(farmacia, FarmaciaResponse.class);
         return ResponseEntity.ok(response);
     }
 }
