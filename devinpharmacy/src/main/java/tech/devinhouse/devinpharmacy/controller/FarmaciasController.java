@@ -1,16 +1,16 @@
 package tech.devinhouse.devinpharmacy.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import tech.devinhouse.devinpharmacy.dto.FarmaciaRequest;
 import tech.devinhouse.devinpharmacy.dto.FarmaciaResponse;
 import tech.devinhouse.devinpharmacy.model.Farmacia;
 import tech.devinhouse.devinpharmacy.service.FarmaciaService;
 import org.modelmapper.ModelMapper;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,5 +40,14 @@ public class FarmaciasController {
         Farmacia farmacia = farmaciaService.consultar(cnpj);
         FarmaciaResponse response = mapper.map(farmacia, FarmaciaResponse.class);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    public ResponseEntity<FarmaciaResponse> criarFarmacia(@RequestBody @Valid FarmaciaRequest request) {
+        var farmacia = mapper.map(request, Farmacia.class);
+        farmacia = farmaciaService.salvar(farmacia);
+        var response = mapper.map(farmacia, FarmaciaResponse.class);
+        return ResponseEntity.created(URI.create(farmacia.getCnpj().toString())).body(response);
+
     }
 }
