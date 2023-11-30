@@ -26,7 +26,6 @@ public class EnderecoRequest {
     @NotBlank(message = "Este campo não pode estar vazio")
     private String estado;
 
-    @NotBlank(message = "Este campo não pode estar vazio")
     private String complemento;
 
     @NotNull(message = "Este campo não pode estar vazio")

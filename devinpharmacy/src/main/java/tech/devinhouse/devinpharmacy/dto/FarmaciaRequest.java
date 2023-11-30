@@ -16,7 +16,7 @@ public class FarmaciaRequest {
     @NotBlank(message = "Este campo não pode estar vazio")
     private String razaoSocial;
 
-    @NotEmpty(message = "Este campo não pode estar vazio")
+    @NotBlank(message = "Este campo não pode estar vazio")
     private String nomeFantasia;
 
     @NotBlank(message = "Este campo não pode estar vazio")
