@@ -20,7 +20,7 @@ public class FarmaciaService {
     }
 
     public Farmacia consultar(Long cnpj) {
-        return farmaciaRepo.findById(cnpj).orElseThrow(() -> new CnpjNaoEncontradoException("CNPJ não encontrado"));
+        return farmaciaRepo.findById(cnpj).orElseThrow(CnpjNaoEncontradoException::new);
     }
 
     public Farmacia salvar(Farmacia farmacia) {
