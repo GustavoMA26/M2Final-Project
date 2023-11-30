@@ -34,7 +34,7 @@ public class FarmaciasController {
         }
         return ResponseEntity.ok(response);
     }
-    
+
     @GetMapping("/{cnpj}")
     public ResponseEntity<FarmaciaResponse> consultarFarmacia(@PathVariable("cnpj") Long cnpj) {
         Farmacia farmacia = farmaciaService.consultar(cnpj);
