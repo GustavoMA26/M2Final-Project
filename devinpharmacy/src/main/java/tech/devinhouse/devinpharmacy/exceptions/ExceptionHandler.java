@@ -1,5 +1,6 @@
 package tech.devinhouse.devinpharmacy.exceptions;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -26,6 +27,12 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler
     public ResponseEntity<Object> handleCnpjExistenteException(CnpjExistenteException ex) {
         ErroResponse erro = new ErroResponse("CNPJ JÁ CADASTRADO", "Este CNPJ já se encontra cadastrado em outra farmácia");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler
+    public ResponseEntity<Object> handleMedicamentoExistenteException(MedicamentoExistenteException ex) {
+        ErroResponse erro = new ErroResponse("MEDICAMENTO JÁ CADASTRADO","Este medicamento já se encontra cadastrado");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 
