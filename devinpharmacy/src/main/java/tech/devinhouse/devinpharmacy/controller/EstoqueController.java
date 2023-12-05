@@ -1,19 +1,17 @@
 package tech.devinhouse.devinpharmacy.controller;
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import tech.devinhouse.devinpharmacy.dto.EstoqueRequest;
 import tech.devinhouse.devinpharmacy.dto.EstoqueResponse;
 import tech.devinhouse.devinpharmacy.model.Estoque;
 import tech.devinhouse.devinpharmacy.repositories.EstoqueRepo;
 import tech.devinhouse.devinpharmacy.service.EstoqueService;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +41,19 @@ public class EstoqueController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
+        }
+    }
+    @PostMapping
+    public ResponseEntity<EstoqueResponse> adicionarEstoque(@RequestBody @Valid EstoqueRequest request) {
+        Estoque estoque = modelMapper.map(request, Estoque.class);
+
+        Estoque estoqueAtual = estoqueService.incluirEstoque(estoque);
+
+        if(estoqueAtual!=null) {
+            EstoqueResponse response = modelMapper.map(estoqueAtual, EstoqueResponse.class);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 }
