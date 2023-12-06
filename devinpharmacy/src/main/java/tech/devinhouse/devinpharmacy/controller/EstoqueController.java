@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.devinhouse.devinpharmacy.dto.EstoqueRequest;
 import tech.devinhouse.devinpharmacy.dto.EstoqueResponse;
+import tech.devinhouse.devinpharmacy.exceptions.CnpjRegistroNaoCadastradoException;
 import tech.devinhouse.devinpharmacy.model.Estoque;
 import tech.devinhouse.devinpharmacy.repositories.EstoqueRepo;
 import tech.devinhouse.devinpharmacy.service.EstoqueService;
@@ -51,6 +52,19 @@ public class EstoqueController {
 
         if(estoqueAtual!=null) {
             EstoqueResponse response = modelMapper.map(estoqueAtual, EstoqueResponse.class);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<EstoqueResponse> venderEstoque(@RequestBody @Valid EstoqueRequest request) {
+        Estoque estoque = modelMapper.map(request, Estoque.class);
+        Estoque estoqueAtualizado = estoqueService.venderEstoque(estoque);
+
+        if (estoqueAtualizado!= null) {
+            EstoqueResponse response = modelMapper.map(estoqueAtualizado, EstoqueResponse.class);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

@@ -3,6 +3,7 @@ package tech.devinhouse.devinpharmacy.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.devinhouse.devinpharmacy.exceptions.CnpjRegistroNaoCadastradoException;
+import tech.devinhouse.devinpharmacy.exceptions.QtdEstoqueIndisponivelException;
 import tech.devinhouse.devinpharmacy.model.Estoque;
 import tech.devinhouse.devinpharmacy.model.Farmacia;
 import tech.devinhouse.devinpharmacy.model.IdEstoque;
@@ -52,6 +53,35 @@ public class EstoqueService {
                 estoque.setDataAtualizacao(LocalDateTime.now());
                 return estoqueRepo.save(estoque);
             }
+        } else {
+            throw new CnpjRegistroNaoCadastradoException();
+        }
+    }
+
+    public Estoque venderEstoque(Estoque estoque) {
+        Farmacia farmaciaAtual = farmaciaService.consultar(estoque.getCnpj());
+        boolean medicamentoAtual = medicamentoService.temMedicamento(estoque.getNroRegistro());
+
+        if(farmaciaAtual!=null && medicamentoAtual) {
+            Optional<Estoque> estoqueAtualOpt = estoqueRepo.findById(new IdEstoque(estoque.getCnpj(), estoque.getNroRegistro()));
+
+            if(estoqueAtualOpt.isPresent() && estoqueAtualOpt.get().getQuantidade() >= estoque.getQuantidade()) {
+                Estoque estoqueExistente = estoqueAtualOpt.get();
+                int novoEstoque = estoqueExistente.getQuantidade() - estoque.getQuantidade();
+                estoqueExistente.setQuantidade(novoEstoque);
+                estoqueExistente.setDataAtualizacao(LocalDateTime.now());
+
+                Estoque estoqueAtualizado = estoqueRepo.save(estoqueExistente);
+
+                if(novoEstoque == 0) {
+                    estoqueRepo.delete(estoqueAtualizado);
+                }
+                return estoqueAtualizado;
+
+            } else {
+                throw new QtdEstoqueIndisponivelException();
+            }
+
         } else {
             throw new CnpjRegistroNaoCadastradoException();
         }

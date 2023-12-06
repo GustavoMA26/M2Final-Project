@@ -41,6 +41,12 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler
+    public ResponseEntity<Object> handleQtdEstoqueIndisponivelException(QtdEstoqueIndisponivelException ex) {
+        ErroResponse erro = new ErroResponse("NÃO EXISTE ESTOQUE DISPONÍVEL","Infelizmente esta quantidade não está disponível para venda!");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+    }
+
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         Map<String, String> fieldErrors = new HashMap<>();
