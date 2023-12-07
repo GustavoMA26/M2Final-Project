@@ -1,5 +1,6 @@
 package tech.devinhouse.devinpharmacy.controller;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.devinhouse.devinpharmacy.dto.EstoqueRequest;
 import tech.devinhouse.devinpharmacy.dto.EstoqueResponse;
+import tech.devinhouse.devinpharmacy.dto.TrocaRequest;
+import tech.devinhouse.devinpharmacy.dto.TrocaResponse;
 import tech.devinhouse.devinpharmacy.exceptions.CnpjRegistroNaoCadastradoException;
 import tech.devinhouse.devinpharmacy.model.Estoque;
 import tech.devinhouse.devinpharmacy.repositories.EstoqueRepo;
@@ -66,6 +69,18 @@ public class EstoqueController {
         if (estoqueAtualizado!= null) {
             EstoqueResponse response = modelMapper.map(estoqueAtualizado, EstoqueResponse.class);
             return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @Transactional
+    @PutMapping
+    public ResponseEntity<TrocaResponse> trocarEstoque(@RequestBody @Valid TrocaRequest request) {
+        TrocaResponse trocaResponse = estoqueService.trocaEstoque(request);
+
+        if(trocaResponse!= null) {
+        return ResponseEntity.status(HttpStatus.OK).body(trocaResponse);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
